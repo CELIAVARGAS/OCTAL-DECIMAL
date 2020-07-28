@@ -1,0 +1,60 @@
+package octal_decimal;
+import java_cup.runtime.Symbol;
+
+parser code 
+{:
+    public void syntax_error(Symbol s){
+            String error =" ERROR Sintactico en token: "+s.value+" en linea: " +(s.left + 1 )+" y columna: "+(s.right + 1)+"\n";
+        System.out.println(error);
+    }
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+            String error =" ERROR Sintactico en token: "+s.value+" en linea: " +(s.left + 1 )+" y columna: "+(s.right + 1)+"\n";    
+        System.out.println(error);
+    }
+:}
+
+
+terminal String        numeroOctal;
+
+nonterminal Integer   octales, octal, s;
+    
+
+start with s;
+
+s   ::= octales:ocs
+{:
+        System.out.println("");
+        System.out.println("Numero octal en decimal-> "+ocs);
+:};
+
+
+octales ::= 
+            octales:ocs octal:oc 
+{:
+        int ocs2=(ocs*8)+oc;
+        RESULT =ocs2;
+        System.out.println("\t \\");
+        System.out.println("\t"+ocs+" <- octales1");
+        System.out.println("\t"+oc+" <- octal");
+        System.out.println("\t\t \\");
+        System.out.println("\t\t"+ocs2+" <- octales");
+
+:}|
+            octal:oc
+{:
+        RESULT =oc;
+        System.out.println("\t \\");
+        System.out.println("\t"+oc+" <- octal");
+:}|
+            error  
+{:
+        RESULT=0;
+:};
+
+octal ::= 
+        numeroOctal:num
+{:
+        RESULT =new Integer(num);
+        System.out.println(num+" <- numero");
+:};
+
